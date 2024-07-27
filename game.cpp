@@ -1,4 +1,4 @@
-// test7
+// test7.1
 #include <iostream>
 #include <random>
 #include <vector>
@@ -81,26 +81,33 @@ void endmap()
         cout << endl; // 每行结束后换行
     }
 }
-
 // 递归显示空白格子及其周围的格子
 void reveal(int row, int col) {
-    if (row < 0 || row >= board.size() || col < 0 || col >= board[0].size() || appear[row][col] == 1)
-    {
+    // 检查边界条件和是否已经显示
+    if (row < 0 || row >= board.size() || col < 0 || col >= board[0].size() || appear[row][col] == 1) {
         return;
     }
+    // 标记当前格子为已显示
     appear[row][col] = 1;
+
+    // 如果当前格子是空白格子，递归展开周围的格子
     if (board[row][col] == 0) 
     {
+        // 遍历周围的8个方向
         for (int i = -1; i <= 1; i++) 
         {
             for (int j = -1; j <= 1; j++) 
             {
+                // 避免对当前格子进行递归调用
+                if (i == 0 && j == 0) 
+                {
+                    continue;
+                }
                 reveal(row + i, col + j);
             }
         }
     }
 }
-
 // 检查所有雷格子是否都被标记
 bool allMinesMarked() {
     for (int i = 0; i < board.size(); i++) {
