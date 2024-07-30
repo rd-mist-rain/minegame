@@ -1,4 +1,4 @@
-// test7.1
+// test7.2
 #include <iostream>
 #include <random>
 #include <vector>
@@ -84,7 +84,7 @@ void endmap()
 // 递归显示空白格子及其周围的格子
 void reveal(int row, int col) {
     // 检查边界条件和是否已经显示
-    if (row < 0 || row >= board.size() || col < 0 || col >= board[0].size() || appear[row][col] == 1) {
+    if (row < 0 || row >= board.size() || col < 0 || col >= board[row].size() || appear[row][col] == 1) {
         return;
     }
     // 标记当前格子为已显示
