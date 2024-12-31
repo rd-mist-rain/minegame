@@ -44,9 +44,9 @@ fn main()
 {
     println!("Welcome to minegame");
     let mut map:HashMap<(u32,u32),Point>=HashMap::new();
-    let nx=4;
-    let ny=4;
-    let nmine:u32=3;
+    let nx=10;
+    let ny=10;
+    let nmine:u32=7;
     let mines=create_map(&mut map,nmine,nx,ny);
     /* 测试用代码，可以打印出所有雷的坐标
     for (i,j) in &mines
@@ -130,28 +130,33 @@ fn each(map: &mut HashMap<(u32,u32),Point>,winning:&mut bool,mines:&Vec<(u32,u32
 
     }
 }
-fn click(x:u32,y:u32,map:&mut HashMap<(u32,u32),Point>,winning:&mut bool)
-{
-    if let Some(point)=map.get_mut(&(x,y))
-    {
-        point.appear();
-        if point.num==0
-        {
-            click(x+1,y,map,winning);
-            click(x-1,y,map,winning);
-            click(x+1,y+1,map,winning);
-            click(x-1,y+1,map,winning);
-            click(x+1,y-1,map,winning);
-            click(x-1,y-1,map,winning);
-            click(x,y-1,map,winning);
-            click(x,y+1,map,winning);
-        }
-        else if point.num==-1
-        {
-            *winning=false;
+fn click(x: u32, y: u32, map: &mut HashMap<(u32, u32), Point>, winning: &mut bool) {
+    let mut stack = vec![(x, y)];
+    while let Some((cx, cy)) = stack.pop() {
+        if let Some(point) = map.get_mut(&(cx, cy)) {
+            if point.state == 0 
+            {
+                point.appear();
+                if point.num == -1 
+                {
+                    *winning = false;
+                    return;
+                } 
+                else if point.num == 0 {
+                    stack.push((cx + 1, cy));
+                    stack.push((cx - 1, cy));
+                    stack.push((cx + 1, cy + 1));
+                    stack.push((cx - 1, cy + 1));
+                    stack.push((cx + 1, cy - 1));
+                    stack.push((cx - 1, cy - 1));
+                    stack.push((cx, cy - 1));
+                    stack.push((cx, cy + 1));
+                }
+            }
         }
     }
 }
+
 fn flag(x:u32,y:u32,map:&mut HashMap<(u32,u32),Point>)
 {
     if let Some(point)=map.get_mut(&(x,y))
