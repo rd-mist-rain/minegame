@@ -40,13 +40,27 @@ fn create_map(map:&mut HashMap<(u32,u32),Point>,nmine:u32,nx:u32,ny:u32)->Vec<(u
     }
     return mines;
 }
+fn read_config()->(u32,u32,u32)
+{
+    let mut nx_str=String::new();
+    let mut yx_str=String::new();
+    let mut nmine_str=String::new();
+    println!("请输入你需要的行数:");
+    io::stdin().read_line(&mut nx_str).expect("Failed to read");
+    let nx=nx_str.trim().parse::<u32>().unwrap();
+    println!("请输入你需要的列数:");
+    io::stdin().read_line(&mut yx_str).expect("Failed to read");
+    let ny=yx_str.trim().parse::<u32>().unwrap();
+    println!("请输入你需要的雷数:");
+    io::stdin().read_line(&mut nmine_str).expect("Failed to read");
+    let nmine=nmine_str.trim().parse::<u32>().unwrap();
+    return(nx,ny,nmine);
+}
 fn main()
 {
     println!("Welcome to minegame");
     let mut map:HashMap<(u32,u32),Point>=HashMap::new();
-    let nx=10;
-    let ny=10;
-    let nmine:u32=7;
+    let (nx,ny,nmine)=read_config();
     let mines=create_map(&mut map,nmine,nx,ny);
     /* 测试用代码，可以打印出所有雷的坐标
     for (i,j) in &mines
@@ -132,17 +146,15 @@ fn each(map: &mut HashMap<(u32,u32),Point>,winning:&mut bool,mines:&Vec<(u32,u32
 }
 fn click(x: u32, y: u32, map: &mut HashMap<(u32, u32), Point>, winning: &mut bool) {
     let mut stack = vec![(x, y)];
+
     while let Some((cx, cy)) = stack.pop() {
         if let Some(point) = map.get_mut(&(cx, cy)) {
-            if point.state == 0 
-            {
+            if point.state == 0 {
                 point.appear();
-                if point.num == -1 
-                {
+                if point.num == -1 {
                     *winning = false;
                     return;
-                } 
-                else if point.num == 0 {
+                } else if point.num == 0 {
                     stack.push((cx + 1, cy));
                     stack.push((cx - 1, cy));
                     stack.push((cx + 1, cy + 1));
@@ -172,9 +184,16 @@ fn flag(x:u32,y:u32,map:&mut HashMap<(u32,u32),Point>)
     }
 }
 fn print_map(map:&HashMap<(u32,u32),Point>,nx:u32,ny:u32)
-{
+{   
+    print!("      ");
+    for k in 1..=nx
+    {
+        print!("{:<3}",k);
+    }
+    print!("\n");
     for i in 1..=ny
     {
+        print!("{:>4}  ",i);
         for j in 1..=nx
         {
             if let Some(point)=map.get(&(j,i))
