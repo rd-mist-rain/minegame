@@ -85,7 +85,7 @@ fn main()
 fn each(map: &mut HashMap<(u32,u32),Point>,winning:&mut bool,mines:&Vec<(u32,u32)>)
 {
     let mut i=0;
-    for (cx,cy) in mines.clone()
+    for &(cx,cy) in mines
     {
         if let Some(point)=map.get_mut(&(cx,cy))
         {
