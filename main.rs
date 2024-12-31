@@ -45,10 +45,10 @@ fn read_config()->(u32,u32,u32)
     let mut nx_str=String::new();
     let mut yx_str=String::new();
     let mut nmine_str=String::new();
-    println!("请输入你需要的行数:");
+    println!("请输入你需要的列数:");
     io::stdin().read_line(&mut nx_str).expect("Failed to read");
     let nx=nx_str.trim().parse::<u32>().unwrap();
-    println!("请输入你需要的列数:");
+    println!("请输入你需要的行数:");
     io::stdin().read_line(&mut yx_str).expect("Failed to read");
     let ny=yx_str.trim().parse::<u32>().unwrap();
     println!("请输入你需要的雷数:");
@@ -60,7 +60,7 @@ fn main()
 {
     println!("Welcome to minegame");
     let mut map:HashMap<(u32,u32),Point>=HashMap::new();
-    let (nx,ny,nmine)=read_config();
+    let (nx,ny,nmine)=read_config();//nx、ny在这里分别被定义为沿着x轴、y轴有几个数
     let mines=create_map(&mut map,nmine,nx,ny);
     /* 测试用代码，可以打印出所有雷的坐标
     for (i,j) in &mines
@@ -184,7 +184,7 @@ fn flag(x:u32,y:u32,map:&mut HashMap<(u32,u32),Point>)
     }
 }
 fn print_map(map:&HashMap<(u32,u32),Point>,nx:u32,ny:u32)
-{   
+{   //nx、ny在这里分别被定义为沿着x轴、y轴有几个数
     print!("      ");
     for k in 1..=nx
     {
